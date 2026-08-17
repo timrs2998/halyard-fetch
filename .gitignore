@@ -1,0 +1,18 @@
+# build output
+main.js
+dist/
+*.js.map
+
+# dependencies
+node_modules/
+
+# environment / editor cruft
+.DS_Store
+Thumbs.db
+.claude/
+
+# Obsidian plugin runtime data (never commit tokens)
+data.json
+
+# wdio-obsidian-service: downloaded/cached real Obsidian builds for e2e tests
+.obsidian-cache

@@ -5,6 +5,12 @@ on:
     branches: ["**"]
   pull_request:
 
+# A newer push to the same ref makes the in-flight run obsolete. Cancelling it
+# frees the runner immediately instead of queueing behind work nobody wants.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest

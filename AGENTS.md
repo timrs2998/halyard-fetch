@@ -87,9 +87,14 @@ Test against real artifacts, not mocks.
 
 ## Releasing
 
-1. Bump `manifest.json`, `package.json` and `versions.json` together.
-2. Tag **without** a `v` prefix (`git tag 1.2.3`). Obsidian's validation requires the
-   tag to equal `manifest.json`'s version exactly.
-3. Pushing the tag runs `.github/workflows/release.yml`, which re-verifies the match
-   and attaches `manifest.json`, `main.js` and `styles.css` as individual assets —
-   never a zip.
+- `npm version x.y.z` — the repo's `version` hook runs `version-bump.mjs`, so
+  `package.json`, `manifest.json` and `versions.json` all move together. It commits
+  and tags `x.y.z`.
+- `git push origin main --tags`
+- `.github/workflows/release.yml` re-verifies the tag against `manifest.json` and
+  attaches `manifest.json`, `main.js` and `styles.css` as individual assets — never a zip.
+
+The tag takes no `v` prefix: Obsidian's validation requires it to equal
+`manifest.json`'s version exactly. `.npmrc` sets `tag-version-prefix=""` so
+`npm version` doesn't add one. Don't hand-edit the three version files; the one
+command keeps them consistent.

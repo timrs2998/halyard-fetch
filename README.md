@@ -136,6 +136,17 @@ matrix with `OBSIDIAN_VERSIONS` (e.g. `"earliest/earliest latest/latest"`).
 Architecture and rationale live in [DESIGN.md](DESIGN.md); contributor conventions in
 [AGENTS.md](AGENTS.md).
 
+## Releasing
+
+- `npm version x.y.z` — bumps `package.json`, `manifest.json` and `versions.json`
+  together, commits, and tags `x.y.z`
+- `git push origin main --tags`
+- GitHub Actions builds, verifies the tag matches `manifest.json`, and attaches
+  `manifest.json`, `main.js` and `styles.css` to the release
+
+No `v` prefix on the tag — Obsidian requires it to equal `manifest.json`'s version
+exactly. `.npmrc`'s `tag-version-prefix=""` is what keeps `npm version` from adding one.
+
 ## Prior art and credits
 
 - **[obsidian-git](https://github.com/Vinzent03/obsidian-git)** (Vinzent03) — the

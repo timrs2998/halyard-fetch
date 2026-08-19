@@ -48,7 +48,7 @@ export async function requestWithRateLimitRetry(
 	options: RateLimitRetryOptions = {}
 ): Promise<HttpResponse> {
 	const maxWaitSeconds = options.maxWaitSeconds ?? 30;
-	const sleep = options.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
+	const sleep = options.sleep ?? ((ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms)));
 
 	const first = await request(opts);
 	if (first.status !== 429) return first;

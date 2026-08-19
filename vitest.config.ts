@@ -11,5 +11,8 @@ export default defineConfig({
 	root: fileURLToPath(new URL(".", import.meta.url)),
 	test: {
 		include: ["tests/**/*.test.ts"],
+		// Supplies the `window` that plugin code reaches for — see the setup
+		// file's comment.
+		setupFiles: ["tests/setup/window-globals.ts"],
 	},
 });

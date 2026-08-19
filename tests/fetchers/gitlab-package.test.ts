@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { gitlabCheckFreshness, gitlabFetchZip } from "../../src/fetchers/gitlab-package";
 import type { HttpResponse, RequestFn } from "../../src/fetchers/http";
 import type { GitlabPackageSource } from "../../src/types";
+import { anyString } from "../helpers/matchers";
+import { requestCalls } from "../helpers/mocks";
 
 const source: GitlabPackageSource = {
 	kind: "gitlab-package",
@@ -29,7 +31,7 @@ describe("gitlabCheckFreshness", () => {
 	it("uses a self-managed baseUrl when configured", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue(ok());
 		await gitlabCheckFreshness({ ...source, baseUrl: "https://gitlab.example.com/" }, "tok", request);
-		const url = (request as ReturnType<typeof vi.fn>).mock.calls[0][0].url;
+		const url = requestCalls(request)[0]?.[0].url;
 		expect(url).toBe("https://gitlab.example.com/api/v4/projects/123/packages/generic/team-handbook/latest/team-handbook.zip");
 	});
 
@@ -42,13 +44,13 @@ describe("gitlabCheckFreshness", () => {
 	it("classifies a 401 as auth-failure", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue({ status: 401, headers: {}, arrayBuffer: new ArrayBuffer(0) });
 		const result = await gitlabCheckFreshness(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: anyString() } });
 	});
 
 	it("classifies a 404 as not-found", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue({ status: 404, headers: {}, arrayBuffer: new ArrayBuffer(0) });
 		const result = await gitlabCheckFreshness(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: anyString() } });
 	});
 });
 
@@ -70,6 +72,6 @@ describe("gitlabFetchZip", () => {
 	it("surfaces a transient error on a 5xx", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue({ status: 503, headers: {}, arrayBuffer: new ArrayBuffer(0) });
 		const result = await gitlabFetchZip(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "transient", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "transient", message: anyString() } });
 	});
 });

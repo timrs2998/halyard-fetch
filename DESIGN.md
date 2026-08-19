@@ -387,8 +387,11 @@ blank or absent widget, so first install doesn't read as "is this even working."
   by tsconfig's `noUnusedLocals`/`noUnusedParameters` and the compiler's own
   ambient-global awareness respectively).
 - `manifest.json`: `id: tether-fetch`, `isDesktopOnly: false` (mobile is a v1
-  target — see "Constraints" #3 and #6), `minAppVersion: 1.11.0` (the
-  `app.secretStorage` floor from Constraints #5).
+  target — see "Constraints" #3 and #6), `minAppVersion: 1.13.0`. The
+  `app.secretStorage` floor from Constraints #5 is only 1.11.0; what raises it
+  is the settings tab, which is declarative (`getSettingDefinitions`,
+  `settings.ts`) so its rows appear in Obsidian's settings search — that API
+  and `ButtonComponent.setDestructive` are both 1.13.0+.
 
 ## Publishing
 

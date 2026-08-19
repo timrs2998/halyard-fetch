@@ -12,7 +12,9 @@ export function slugify(text: string): string {
 function randomSuffix(length = 6): string {
 	const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
 	const bytes = new Uint8Array(length);
-	const cryptoObj = globalThis.crypto;
+	// `window.crypto` rather than the bare global: Obsidian popout windows get
+	// their own `window`, and plugin code is expected to go through it.
+	const cryptoObj = window.crypto;
 	if (cryptoObj && typeof cryptoObj.getRandomValues === "function") {
 		cryptoObj.getRandomValues(bytes);
 	} else {

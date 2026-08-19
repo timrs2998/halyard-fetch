@@ -421,7 +421,7 @@ export class SourceWizardModal extends Modal {
 				.addButton((btn) =>
 					btn
 						.setButtonText(this.skipTestArmed ? "Confirm skip" : "Skip and save anyway")
-						.setWarning()
+						.setDestructive()
 						.onClick(() => {
 							if (!this.skipTestArmed) {
 								this.skipTestArmed = true;

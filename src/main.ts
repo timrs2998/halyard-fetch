@@ -283,7 +283,7 @@ export default class TetherFetchPlugin extends Plugin {
 		if (!this.isMobile || this.settings.mobileWifiOnly !== null) return;
 
 		const notice = new Notice("Tether Fetch: restrict refreshes to Wi-Fi on this device? Change anytime in settings.", 0);
-		const actions = notice.noticeEl.createDiv({ cls: "tether-fetch-notice-actions" });
+		const actions = notice.messageEl.createDiv({ cls: "tether-fetch-notice-actions" });
 		const finish = async (value: boolean) => {
 			this.settings.mobileWifiOnly = value;
 			await this.saveAll();

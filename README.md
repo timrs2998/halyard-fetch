@@ -3,7 +3,7 @@
 [![CI](https://github.com/timrs2998/tether-fetch/actions/workflows/ci.yml/badge.svg)](https://github.com/timrs2998/tether-fetch/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/timrs2998/tether-fetch?sort=semver)](https://github.com/timrs2998/tether-fetch/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Obsidian](https://img.shields.io/badge/Obsidian-%3E%3D1.11.0-7c3aed)](https://obsidian.md)
+[![Obsidian](https://img.shields.io/badge/Obsidian-%3E%3D1.13.0-7c3aed)](https://obsidian.md)
 [![Mobile](https://img.shields.io/badge/mobile-supported-brightgreen)](#)
 
 Pull a generated artifact from a remote registry — a GitLab generic package or a

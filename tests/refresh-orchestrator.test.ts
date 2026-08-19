@@ -5,6 +5,8 @@ import type { RequestFn } from "../src/fetchers/http";
 import { formatBytes, refreshSource, type RefreshOrchestratorDeps, type TokenProvider } from "../src/refresh-orchestrator";
 import { defaultSettings, type LogEntry, type Source, type SourceState } from "../src/types";
 import { MockAdapter } from "./helpers/mock-adapter";
+import { anyString } from "./helpers/matchers";
+import { asMock } from "./helpers/mocks";
 
 function buildZip(entries: Record<string, string | null>): Uint8Array {
 	const zippable: Record<string, Uint8Array> = {};
@@ -44,7 +46,7 @@ function harness(opts: { token?: string | null; initialState?: SourceState } = {
 		lock: new KeyedAsyncLock(),
 		secretStore: tokenProvider,
 		adapter,
-		request: vi.fn() as unknown as RequestFn,
+		request: vi.fn<RequestFn>(),
 		getSettings: () => defaultSettings(),
 		getState: (id) => states[id] ?? {},
 		setState: (id, state) => {
@@ -75,7 +77,7 @@ describe("refreshSource", () => {
 		const { deps, notices, logs } = harness({ token: null });
 		const result = await refreshSource(source, "manual", deps);
 
-		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: anyString() } });
 		expect(deps.request).not.toHaveBeenCalled();
 		expect(notices).toHaveLength(1);
 		expect(logs[source.id][0].outcome).toBe("auth-failure");
@@ -87,7 +89,7 @@ describe("refreshSource", () => {
 
 		const result = await refreshSource(source, "manual", deps);
 
-		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: anyString() } });
 		expect(deps.request).toHaveBeenCalledTimes(1);
 	});
 
@@ -141,7 +143,7 @@ describe("refreshSource", () => {
 
 		const result = await refreshSource(source, "manual", deps);
 
-		expect(result).toEqual({ ok: false, error: { kind: "content-root-mismatch", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "content-root-mismatch", message: anyString() } });
 		expect(notices).toHaveLength(1);
 	});
 
@@ -154,7 +156,7 @@ describe("refreshSource", () => {
 
 		const result = await refreshSource({ ...source, maxSizeMB: 0 }, "manual", deps);
 
-		expect(result).toEqual({ ok: false, error: { kind: "size-exceeded", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "size-exceeded", message: anyString() } });
 		expect(adapter.files.size).toBe(0);
 	});
 
@@ -184,7 +186,7 @@ describe("refreshSource", () => {
 		const { deps } = harness();
 		let concurrent = 0;
 		let maxConcurrent = 0;
-		(deps.request as ReturnType<typeof vi.fn>).mockImplementation(async () => {
+		asMock(deps.request).mockImplementation(async () => {
 			concurrent++;
 			maxConcurrent = Math.max(maxConcurrent, concurrent);
 			await new Promise((r) => setTimeout(r, 5));

@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { githubCheckFreshness, githubFetchZip } from "../../src/fetchers/github-release";
 import type { HttpResponse, RequestFn } from "../../src/fetchers/http";
 import type { GithubReleaseSource } from "../../src/types";
+import { anyString, objectContaining, stringContaining } from "../helpers/matchers";
 
 const source: GithubReleaseSource = {
 	kind: "github-release",
@@ -51,7 +52,7 @@ describe("githubCheckFreshness", () => {
 		const multiAsset = { id: 1, published_at: "x", assets: [{ id: 1, name: "a.zip" }, { id: 2, name: "b.zip" }] };
 		const request: RequestFn = vi.fn().mockResolvedValue(jsonResponse(multiAsset));
 		const result = await githubCheckFreshness(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: expect.stringContaining("2 assets") } });
+		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: stringContaining("2 assets") } });
 	});
 
 	it("picks the matching asset by assetName among multiple", async () => {
@@ -64,7 +65,7 @@ describe("githubCheckFreshness", () => {
 	it("classifies a 401 as auth-failure", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue(jsonResponse({ message: "Bad credentials" }, 401));
 		const result = await githubCheckFreshness(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "auth-failure", message: anyString() } });
 	});
 });
 
@@ -86,7 +87,7 @@ describe("githubFetchZip", () => {
 			2,
 			expect.objectContaining({
 				url: "https://api.github.com/repos/acme/ledger/releases/assets/99",
-				headers: expect.objectContaining({ Accept: "application/octet-stream" }),
+				headers: objectContaining({ Accept: "application/octet-stream" }),
 			})
 		);
 	});
@@ -94,7 +95,7 @@ describe("githubFetchZip", () => {
 	it("does not attempt a download when asset resolution fails", async () => {
 		const request: RequestFn = vi.fn().mockResolvedValue(jsonResponse({ message: "not found" }, 404));
 		const result = await githubFetchZip(source, "tok", request);
-		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: expect.any(String) } });
+		expect(result).toEqual({ ok: false, error: { kind: "not-found", message: anyString() } });
 		expect(request).toHaveBeenCalledTimes(1);
 	});
 });

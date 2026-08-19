@@ -55,14 +55,14 @@ export class LogViewerModal extends Modal {
 			return;
 		}
 
-		const list = contentEl.createEl("div", { cls: "tether-fetch-log-list" });
+		const list = contentEl.createDiv({ cls: "tether-fetch-log-list" });
 		for (const row of rows) {
-			const item = list.createEl("div", { cls: "tether-fetch-log-entry" });
+			const item = list.createDiv({ cls: "tether-fetch-log-entry" });
 			const outcomeClass = row.entry.outcome === "success" ? "tether-fetch-log-success" : "tether-fetch-log-failure";
-			item.createEl("span", { text: formatTimestamp(row.entry.timestamp), cls: "tether-fetch-log-time" });
-			if (!this.sourceId) item.createEl("span", { text: row.sourceLabel, cls: "tether-fetch-log-source" });
-			item.createEl("span", { text: row.entry.outcome, cls: outcomeClass });
-			item.createEl("span", { text: row.entry.detail, cls: "tether-fetch-log-detail" });
+			item.createSpan({ text: formatTimestamp(row.entry.timestamp), cls: "tether-fetch-log-time" });
+			if (!this.sourceId) item.createSpan({ text: row.sourceLabel, cls: "tether-fetch-log-source" });
+			item.createSpan({ text: row.entry.outcome, cls: outcomeClass });
+			item.createSpan({ text: row.entry.detail, cls: "tether-fetch-log-detail" });
 		}
 	}
 }

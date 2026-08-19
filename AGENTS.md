@@ -41,7 +41,7 @@ e2e/                      WebdriverIO against real Obsidian
 |---|---|
 | `npm run dev` | esbuild watch → `main.js` |
 | `npm run build` | `tsc --noEmit` then production esbuild. **Type errors fail here, not in lint.** |
-| `npm run lint` | eslint: dead code and unused imports |
+| `npm run lint` | eslint, mirroring the plugin portal's own review config: `eslint-plugin-obsidianmd` + typescript-eslint **type-checked**. Findings here are the ones the portal reports. |
 | `npm test` | vitest, ~112 tests, no Obsidian required |
 | `npm run test:e2e` | Real Obsidian, desktop and emulated-mobile. Needs `main.js` built first. |
 

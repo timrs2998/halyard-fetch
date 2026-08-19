@@ -1,7 +1,7 @@
 {
 	"id": "tether-fetch",
 	"name": "Tether Fetch",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"minAppVersion": "1.13.0",
 	"description": "Mirror a GitLab package or GitHub release artifact into a vault folder on a schedule. Read-only, no git required, works on desktop and mobile.",
 	"author": "timrs2998",

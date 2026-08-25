@@ -17,8 +17,10 @@ describe("Halyard Fetch loads in a real Obsidian instance", function () {
 	});
 
 	it("adds a ribbon icon", async function () {
-		const ribbon = browser.$('.side-dock-ribbon-action[aria-label="Halyard Fetch: refresh all sources"]');
+		const ribbon = browser.$(".halyard-fetch-ribbon-icon");
 		await expect(ribbon).toExist();
+		await expect(ribbon.$("rect")).toExist();
+		await expect(ribbon).toHaveAttribute("aria-label", "Halyard Fetch: refresh all sources");
 	});
 
 	it("shows a zero-sources status bar item", async function () {

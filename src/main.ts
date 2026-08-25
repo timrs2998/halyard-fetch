@@ -15,6 +15,7 @@ import { detectSecretStorage, SecretStore } from "./secrets";
 import { HalyardFetchSettingTab } from "./settings";
 import { detectHalyardSync, folderIgnorePattern } from "./sync-interop";
 import { defaultSettings, type LogEntry, type PluginSettings, type RefreshResult, type Source, type SourceState } from "./types";
+import { HALYARD_FETCH_ICON_ID, registerHalyardFetchIcon } from "./ui/icon";
 import { LogViewerModal } from "./ui/log-viewer";
 import { SourceWizardModal } from "./ui/wizard";
 
@@ -43,6 +44,7 @@ export default class HalyardFetchPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await this.loadAll();
+		registerHalyardFetchIcon();
 
 		const fallback = {
 			load: async () => ({ ...this.fallbackSecrets }),
@@ -71,9 +73,10 @@ export default class HalyardFetchPlugin extends Plugin {
 
 		this.addSettingTab(new HalyardFetchSettingTab(this.app, this));
 
-		this.ribbonEl = this.addRibbonIcon("download-cloud", "Halyard Fetch: refresh all sources", () => {
+		this.ribbonEl = this.addRibbonIcon(HALYARD_FETCH_ICON_ID, "Halyard Fetch: refresh all sources", () => {
 			void this.onRibbonClick();
 		});
+		this.ribbonEl.addClass("halyard-fetch-ribbon-icon");
 
 		this.statusBarEl = this.addStatusBarItem();
 		this.statusBarEl.addClass("halyard-fetch-status-bar");

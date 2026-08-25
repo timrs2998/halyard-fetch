@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/halyard-fetch.svg" width="112" height="112" alt="Halyard Fetch icon">
+</p>
+
 # Halyard Fetch
 
 [![CI](https://github.com/timrs2998/halyard-fetch/actions/workflows/ci.yml/badge.svg)](https://github.com/timrs2998/halyard-fetch/actions/workflows/ci.yml)

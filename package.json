@@ -1,6 +1,6 @@
 {
 	"name": "halyard-fetch",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Mirror a GitLab package or GitHub release artifact into an Obsidian vault folder — read-only, no git required.",
 	"main": "main.js",
 	"scripts": {

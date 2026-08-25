@@ -1,6 +1,6 @@
 # Third-party notices
 
-Tether Fetch is MIT-licensed (see [LICENSE](LICENSE)). It bundles one
+Halyard Fetch is MIT-licensed (see [LICENSE](LICENSE)). It bundles one
 third-party runtime dependency.
 
 ## fflate

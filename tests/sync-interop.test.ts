@@ -1,23 +1,23 @@
 import { describe, expect, it, vi } from "vitest";
-import { detectTetherSync, folderIgnorePattern } from "../src/sync-interop";
+import { detectHalyardSync, folderIgnorePattern } from "../src/sync-interop";
 
-describe("detectTetherSync", () => {
-	it("returns null when Tether Sync isn't installed", () => {
-		expect(detectTetherSync({ plugins: { plugins: {} } })).toBeNull();
-		expect(detectTetherSync({ plugins: {} })).toBeNull();
-		expect(detectTetherSync({})).toBeNull();
-		expect(detectTetherSync(null)).toBeNull();
+describe("detectHalyardSync", () => {
+	it("returns null when Halyard Sync isn't installed", () => {
+		expect(detectHalyardSync({ plugins: { plugins: {} } })).toBeNull();
+		expect(detectHalyardSync({ plugins: {} })).toBeNull();
+		expect(detectHalyardSync({})).toBeNull();
+		expect(detectHalyardSync(null)).toBeNull();
 	});
 
-	it("returns null when a plugin at that id exists but lacks the method (older Tether Sync)", () => {
-		expect(detectTetherSync({ plugins: { plugins: { "tether-sync": {} } } })).toBeNull();
-		expect(detectTetherSync({ plugins: { plugins: { "tether-sync": { registerExternalIgnorePattern: "nope" } } } })).toBeNull();
+	it("returns null when a plugin at that id exists but lacks the method (older Halyard Sync)", () => {
+		expect(detectHalyardSync({ plugins: { plugins: { "halyard-sync": {} } } })).toBeNull();
+		expect(detectHalyardSync({ plugins: { plugins: { "halyard-sync": { registerExternalIgnorePattern: "nope" } } } })).toBeNull();
 	});
 
-	it("returns a callable registrar when Tether Sync exposes the method", async () => {
+	it("returns a callable registrar when Halyard Sync exposes the method", async () => {
 		const registerExternalIgnorePattern = vi.fn().mockResolvedValue(true);
-		const registrar = detectTetherSync({
-			plugins: { plugins: { "tether-sync": { registerExternalIgnorePattern } } },
+		const registrar = detectHalyardSync({
+			plugins: { plugins: { "halyard-sync": { registerExternalIgnorePattern } } },
 		});
 		expect(registrar).not.toBeNull();
 		await expect(registrar!.registerExternalIgnorePattern("Sources/Ledger/")).resolves.toBe(true);
@@ -26,7 +26,7 @@ describe("detectTetherSync", () => {
 });
 
 describe("folderIgnorePattern", () => {
-	it("appends a trailing slash so Tether Sync's matcher covers the whole folder", () => {
+	it("appends a trailing slash so Halyard Sync's matcher covers the whole folder", () => {
 		expect(folderIgnorePattern("Sources/Ledger")).toBe("Sources/Ledger/");
 	});
 

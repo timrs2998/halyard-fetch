@@ -104,6 +104,6 @@ describe("SecretStore", () => {
 
 	it("produces a lowercase-alphanumeric-plus-dashes ID (app.secretStorage's only accepted shape)", () => {
 		expect(secretKeyForSource("Team Handbook!!")).toMatch(/^[a-z0-9-]+$/);
-		expect(secretKeyForSource("team-handbook-ab12cd")).toBe("tether-fetch-team-handbook-ab12cd");
+		expect(secretKeyForSource("team-handbook-ab12cd")).toBe("halyard-fetch-team-handbook-ab12cd");
 	});
 });

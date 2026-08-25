@@ -1,5 +1,5 @@
 /**
- * Tether Fetch — plugin entry: wires secrets, the per-source lock, the
+ * Halyard Fetch — plugin entry: wires secrets, the per-source lock, the
  * scheduler, settings tab, wizard, log viewer, ribbon, status bar, and
  * commands together. See DESIGN.md for architecture.
  */
@@ -12,8 +12,8 @@ import { withLogEntry, withoutSource as logsWithoutSource } from "./log-store";
 import { refreshSource as runRefresh } from "./refresh-orchestrator";
 import { Scheduler, type RefreshTrigger } from "./scheduler";
 import { detectSecretStorage, SecretStore } from "./secrets";
-import { TetherFetchSettingTab } from "./settings";
-import { detectTetherSync, folderIgnorePattern } from "./sync-interop";
+import { HalyardFetchSettingTab } from "./settings";
+import { detectHalyardSync, folderIgnorePattern } from "./sync-interop";
 import { defaultSettings, type LogEntry, type PluginSettings, type RefreshResult, type Source, type SourceState } from "./types";
 import { LogViewerModal } from "./ui/log-viewer";
 import { SourceWizardModal } from "./ui/wizard";
@@ -25,7 +25,7 @@ interface SavedData {
 	fallbackSecrets?: Record<string, string>;
 }
 
-export default class TetherFetchPlugin extends Plugin {
+export default class HalyardFetchPlugin extends Plugin {
 	settings!: PluginSettings;
 	sourceStates: Record<string, SourceState> = {};
 	logs: Record<string, LogEntry[]> = {};
@@ -53,7 +53,7 @@ export default class TetherFetchPlugin extends Plugin {
 		};
 		this.secretStore = new SecretStore(detectSecretStorage(this.app), fallback);
 
-		// Best-effort Tether Sync interop — see sync-interop.ts. This plugin's
+		// Best-effort Halyard Sync interop — see sync-interop.ts. This plugin's
 		// own data.json can hold plaintext fallback tokens (SecretStore.insecure)
 		// and should never be synced regardless of any source configuration.
 		void this.syncIgnore(this.manifest.dir ? `${this.manifest.dir}/data.json` : null);
@@ -69,14 +69,14 @@ export default class TetherFetchPlugin extends Plugin {
 			},
 		});
 
-		this.addSettingTab(new TetherFetchSettingTab(this.app, this));
+		this.addSettingTab(new HalyardFetchSettingTab(this.app, this));
 
-		this.ribbonEl = this.addRibbonIcon("download-cloud", "Tether Fetch: refresh all sources", () => {
+		this.ribbonEl = this.addRibbonIcon("download-cloud", "Halyard Fetch: refresh all sources", () => {
 			void this.onRibbonClick();
 		});
 
 		this.statusBarEl = this.addStatusBarItem();
-		this.statusBarEl.addClass("tether-fetch-status-bar");
+		this.statusBarEl.addClass("halyard-fetch-status-bar");
 		this.statusBarEl.onClickEvent(() => {
 			new LogViewerModal(this.app, this).open();
 		});
@@ -151,7 +151,7 @@ export default class TetherFetchPlugin extends Plugin {
 
 		// Awaited, not fire-and-forget: this must land before the wizard's
 		// first post-save refresh materializes anything into destinationFolder,
-		// so Tether Sync (if present) never sees an untracked-then-suddenly-
+		// so Halyard Sync (if present) never sees an untracked-then-suddenly-
 		// present folder — it's simply never tracked in the first place.
 		await this.syncIgnore(folderIgnorePattern(source.destinationFolder));
 
@@ -160,15 +160,15 @@ export default class TetherFetchPlugin extends Plugin {
 		this.updateStatusIndicators();
 	}
 
-	/** Best-effort — see sync-interop.ts. Never throws: Tether Sync being absent, outdated, or erroring isn't this plugin's problem to surface. */
+	/** Best-effort — see sync-interop.ts. Never throws: Halyard Sync being absent, outdated, or erroring isn't this plugin's problem to surface. */
 	private async syncIgnore(pattern: string | null): Promise<void> {
 		if (pattern === null) return;
-		const registrar = detectTetherSync(this.app);
+		const registrar = detectHalyardSync(this.app);
 		if (registrar === null) return;
 		try {
 			await registrar.registerExternalIgnorePattern(pattern);
 		} catch {
-			// Tether Sync present but the call failed for some reason of its own — not fatal here.
+			// Halyard Sync present but the call failed for some reason of its own — not fatal here.
 		}
 	}
 
@@ -256,13 +256,13 @@ export default class TetherFetchPlugin extends Plugin {
 		});
 
 		if (sources.length === 0) {
-			this.statusBarEl.setText("Tether Fetch: no sources");
+			this.statusBarEl.setText("Halyard Fetch: no sources");
 		} else if (failing.length > 0) {
-			this.statusBarEl.setText(`Tether Fetch: ${failing.length} failing`);
+			this.statusBarEl.setText(`Halyard Fetch: ${failing.length} failing`);
 		} else {
-			this.statusBarEl.setText("Tether Fetch: ✓");
+			this.statusBarEl.setText("Halyard Fetch: ✓");
 		}
-		this.ribbonEl?.toggleClass("tether-fetch-ribbon-failing", failing.length > 0);
+		this.ribbonEl?.toggleClass("halyard-fetch-ribbon-failing", failing.length > 0);
 	}
 
 	// ---- mobile -------------------------------------------------------------
@@ -282,8 +282,8 @@ export default class TetherFetchPlugin extends Plugin {
 	private async maybePromptMobileWifiOnly(): Promise<void> {
 		if (!this.isMobile || this.settings.mobileWifiOnly !== null) return;
 
-		const notice = new Notice("Tether Fetch: restrict refreshes to Wi-Fi on this device? Change anytime in settings.", 0);
-		const actions = notice.messageEl.createDiv({ cls: "tether-fetch-notice-actions" });
+		const notice = new Notice("Halyard Fetch: restrict refreshes to Wi-Fi on this device? Change anytime in settings.", 0);
+		const actions = notice.messageEl.createDiv({ cls: "halyard-fetch-notice-actions" });
 		const finish = async (value: boolean) => {
 			this.settings.mobileWifiOnly = value;
 			await this.saveAll();

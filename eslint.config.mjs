@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
 // plus typescript-eslint's *type-checked* preset. Running anything less here
 // means the portal finds problems CI cannot — so this config deliberately
 // mirrors the reviewer's, and `npm run lint` is the gate that keeps a release
-// reviewable. (tether-sync carries a copy of this file; keep the two in sync
+// reviewable. (halyard-sync carries a copy of this file; keep the two in sync
 // by hand.)
 export default tseslint.config(
 	{
@@ -51,7 +51,7 @@ export default tseslint.config(
 			// project's own documented recommendation.
 			"no-undef": "off",
 			// Sentence-case checking cannot tell a proper noun from a word it
-			// wants to lowercase: it asks for "Tether fetch" (the plugin's own
+			// wants to lowercase: it asks for "Halyard fetch" (the plugin's own
 			// name), "GitLab" and "GitHub" variants, and so on. The portal does
 			// not enforce this rule, and every finding it produces here is a
 			// false positive on a product name. UI text is reviewed by hand.

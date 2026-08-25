@@ -1,7 +1,7 @@
-# Tether Fetch
+# Halyard Fetch
 
-[![CI](https://github.com/timrs2998/tether-fetch/actions/workflows/ci.yml/badge.svg)](https://github.com/timrs2998/tether-fetch/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/timrs2998/tether-fetch?sort=semver)](https://github.com/timrs2998/tether-fetch/releases)
+[![CI](https://github.com/timrs2998/halyard-fetch/actions/workflows/ci.yml/badge.svg)](https://github.com/timrs2998/halyard-fetch/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/timrs2998/halyard-fetch?sort=semver)](https://github.com/timrs2998/halyard-fetch/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-%3E%3D1.13.0-7c3aed)](https://obsidian.md)
 [![Mobile](https://img.shields.io/badge/mobile-supported-brightgreen)](#)
@@ -13,7 +13,7 @@ schedule or on demand.
 **Read-only.** No git, no clone, no push, no write path back to the source. The
 plugin cannot modify anything outside the folder you point it at.
 
-For the git-based sibling, see [Tether Sync](https://github.com/timrs2998/tether-sync),
+For the git-based sibling, see [Halyard Sync](https://github.com/timrs2998/halyard-sync),
 which syncs a whole vault with a git repository and deliberately excludes this
 use case.
 
@@ -37,11 +37,11 @@ authenticated URLs are designed for but not built — see [DESIGN.md](DESIGN.md)
 **Community plugin directory** — not yet listed; submission is pending.
 
 **BRAT** (beta) — install [BRAT](https://github.com/TfTHacker/obsidian42-brat),
-then "Add beta plugin" with `timrs2998/tether-fetch`.
+then "Add beta plugin" with `timrs2998/halyard-fetch`.
 
 **Manual** — download `manifest.json`, `main.js` and `styles.css` from the
-[latest release](https://github.com/timrs2998/tether-fetch/releases) into
-`<vault>/.obsidian/plugins/tether-fetch/`, then enable it in
+[latest release](https://github.com/timrs2998/halyard-fetch/releases) into
+`<vault>/.obsidian/plugins/halyard-fetch/`, then enable it in
 Settings → Community plugins.
 
 ## Setup
@@ -96,11 +96,11 @@ available once you've fixed whatever broke.
   a host still get independent tokens.
 - The plugin writes only under each source's own destination folder, reads only from
   the host, project and package you configure, and never writes back to a source.
-- **With [Tether Sync](https://github.com/timrs2998/tether-sync) in the same vault**,
-  this plugin registers each destination folder and its own `data.json` with Tether
+- **With [Halyard Sync](https://github.com/timrs2998/halyard-sync) in the same vault**,
+  this plugin registers each destination folder and its own `data.json` with Halyard
   Sync's ignore list automatically — best-effort, no hard dependency, and order of
   installation doesn't matter. That keeps mirrored content and any plaintext fallback
-  token out of what gets committed and pushed. If Tether Sync already tracked one of
+  token out of what gets committed and pushed. If Halyard Sync already tracked one of
   those paths, untrack it once manually: adding an ignore pattern doesn't purge
   existing history.
 
@@ -150,7 +150,7 @@ exactly. `.npmrc`'s `tag-version-prefix=""` is what keeps `npm version` from add
 ## Prior art and credits
 
 - **[obsidian-git](https://github.com/Vinzent03/obsidian-git)** (Vinzent03) — the
-  plugin that defined git-in-Obsidian. Tether Fetch exists because read-only
+  plugin that defined git-in-Obsidian. Halyard Fetch exists because read-only
   artifact ingestion sits outside its scope.
 - **[fflate](https://github.com/101arrowz/fflate)** (Arjun Barrett) — zip handling,
   pure JS with no native dependency, which is what makes mobile support possible.

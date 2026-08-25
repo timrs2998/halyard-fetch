@@ -1,35 +1,35 @@
-.tether-fetch-empty-state {
+.halyard-fetch-empty-state {
 	padding: 1em;
 	text-align: center;
 	opacity: 0.8;
 }
 
-.tether-fetch-status-bar {
+.halyard-fetch-status-bar {
 	cursor: pointer;
 }
 
-.tether-fetch-ribbon-failing {
+.halyard-fetch-ribbon-failing {
 	color: var(--text-error);
 }
 
-.tether-fetch-wizard-modal .tether-fetch-wizard-footer {
+.halyard-fetch-wizard-modal .halyard-fetch-wizard-footer {
 	display: flex;
 	justify-content: flex-end;
 	gap: 0.5em;
 	margin-top: 1.5em;
 }
 
-.tether-fetch-wizard-modal .tether-fetch-wizard-status {
+.halyard-fetch-wizard-modal .halyard-fetch-wizard-status {
 	margin: 0.5em 0;
 	font-weight: 600;
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-list {
+.halyard-fetch-log-viewer .halyard-fetch-log-list {
 	max-height: 60vh;
 	overflow-y: auto;
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-entry {
+.halyard-fetch-log-viewer .halyard-fetch-log-entry {
 	display: flex;
 	gap: 0.75em;
 	padding: 0.35em 0;
@@ -37,29 +37,29 @@
 	font-size: var(--font-ui-small);
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-time {
+.halyard-fetch-log-viewer .halyard-fetch-log-time {
 	opacity: 0.7;
 	white-space: nowrap;
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-source {
+.halyard-fetch-log-viewer .halyard-fetch-log-source {
 	font-weight: 600;
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-success {
+.halyard-fetch-log-viewer .halyard-fetch-log-success {
 	color: var(--text-success);
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-failure {
+.halyard-fetch-log-viewer .halyard-fetch-log-failure {
 	color: var(--text-error);
 }
 
-.tether-fetch-log-viewer .tether-fetch-log-detail {
+.halyard-fetch-log-viewer .halyard-fetch-log-detail {
 	opacity: 0.85;
 	overflow-wrap: anywhere;
 }
 
-.tether-fetch-notice-actions {
+.halyard-fetch-notice-actions {
 	display: flex;
 	gap: 0.5em;
 	margin-top: 0.5em;

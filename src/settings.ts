@@ -17,9 +17,9 @@ import {
 } from "obsidian";
 import { SourceWizardModal } from "./ui/wizard";
 import { LogViewerModal } from "./ui/log-viewer";
-import type TetherFetchPlugin from "./main";
+import type HalyardFetchPlugin from "./main";
 import type { Source } from "./types";
-import { detectTetherSync } from "./sync-interop";
+import { detectHalyardSync } from "./sync-interop";
 
 function formatTimestamp(ms: number | undefined): string {
 	if (ms === undefined) return "never";
@@ -33,10 +33,10 @@ const WIFI_OPTIONS: Record<string, string> = {
 	false: "No restriction",
 };
 
-export class TetherFetchSettingTab extends PluginSettingTab {
+export class HalyardFetchSettingTab extends PluginSettingTab {
 	constructor(
 		app: App,
-		private readonly plugin: TetherFetchPlugin
+		private readonly plugin: HalyardFetchPlugin
 	) {
 		super(app, plugin);
 	}
@@ -133,9 +133,9 @@ export class TetherFetchSettingTab extends PluginSettingTab {
 	}
 
 	private insecureStorageWarning(): string {
-		const tetherSyncPresent = detectTetherSync(this.app) !== null;
-		return tetherSyncPresent
-			? "OS keychain storage is unavailable, so tokens are stored in this plugin's data.json in plaintext. Tether Sync is also installed here: this plugin adds its data.json to Tether Sync's ignore list automatically, but check that list if you've customized it — a plaintext token pushed to a git remote is a leaked credential, not just a local file."
+		const halyardSyncPresent = detectHalyardSync(this.app) !== null;
+		return halyardSyncPresent
+			? "OS keychain storage is unavailable, so tokens are stored in this plugin's data.json in plaintext. Halyard Sync is also installed here: this plugin adds its data.json to Halyard Sync's ignore list automatically, but check that list if you've customized it — a plaintext token pushed to a git remote is a leaked credential, not just a local file."
 			: "OS keychain storage is unavailable, so tokens are stored in this plugin's data.json in plaintext. Use the narrowest token scope your host allows.";
 	}
 

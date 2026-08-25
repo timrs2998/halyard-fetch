@@ -6,7 +6,7 @@ This plugin was developed with substantial AI assistance (Claude).
 
 ## What this plugin is
 
-Tether Fetch downloads a zip from a remote registry, extracts it, and mirrors its
+Halyard Fetch downloads a zip from a remote registry, extracts it, and mirrors its
 contents into a vault folder. Read-only: there is no code path that writes back to a
 source. Keep it that way — it's the plugin's core guarantee, not a default.
 
@@ -26,7 +26,7 @@ src/
   log-store.ts            Capped refresh history (pure)
   async-lock.ts           Per-source serialization
   secrets.ts              Token storage: secretStorage, data.json fallback
-  sync-interop.ts         Optional Tether Sync ignore-list registration
+  sync-interop.ts         Optional Halyard Sync ignore-list registration
   vault-adapter.ts        The DataAdapter subset materialize needs
   fetchers/               Per-source-type HTTP; index.ts dispatches on config.kind
   zip/explode.ts          fflate extraction + content-root detection

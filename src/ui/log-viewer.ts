@@ -4,7 +4,7 @@
  */
 
 import { Modal, type App } from "obsidian";
-import type TetherFetchPlugin from "../main";
+import type HalyardFetchPlugin from "../main";
 import type { LogEntry } from "../types";
 
 function formatTimestamp(ms: number): string {
@@ -14,7 +14,7 @@ function formatTimestamp(ms: number): string {
 export class LogViewerModal extends Modal {
 	constructor(
 		app: App,
-		private readonly plugin: TetherFetchPlugin,
+		private readonly plugin: HalyardFetchPlugin,
 		/** Omitted shows every source's history, most recent first, source-labeled. */
 		private readonly sourceId?: string
 	) {
@@ -32,7 +32,7 @@ export class LogViewerModal extends Modal {
 	private render(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.addClass("tether-fetch-log-viewer");
+		contentEl.addClass("halyard-fetch-log-viewer");
 
 		const sources = this.sourceId
 			? this.plugin.settings.sources.filter((s) => s.id === this.sourceId)
@@ -55,14 +55,14 @@ export class LogViewerModal extends Modal {
 			return;
 		}
 
-		const list = contentEl.createDiv({ cls: "tether-fetch-log-list" });
+		const list = contentEl.createDiv({ cls: "halyard-fetch-log-list" });
 		for (const row of rows) {
-			const item = list.createDiv({ cls: "tether-fetch-log-entry" });
-			const outcomeClass = row.entry.outcome === "success" ? "tether-fetch-log-success" : "tether-fetch-log-failure";
-			item.createSpan({ text: formatTimestamp(row.entry.timestamp), cls: "tether-fetch-log-time" });
-			if (!this.sourceId) item.createSpan({ text: row.sourceLabel, cls: "tether-fetch-log-source" });
+			const item = list.createDiv({ cls: "halyard-fetch-log-entry" });
+			const outcomeClass = row.entry.outcome === "success" ? "halyard-fetch-log-success" : "halyard-fetch-log-failure";
+			item.createSpan({ text: formatTimestamp(row.entry.timestamp), cls: "halyard-fetch-log-time" });
+			if (!this.sourceId) item.createSpan({ text: row.sourceLabel, cls: "halyard-fetch-log-source" });
 			item.createSpan({ text: row.entry.outcome, cls: outcomeClass });
-			item.createSpan({ text: row.entry.detail, cls: "tether-fetch-log-detail" });
+			item.createSpan({ text: row.entry.detail, cls: "halyard-fetch-log-detail" });
 		}
 	}
 }

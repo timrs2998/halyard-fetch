@@ -16,11 +16,11 @@ async function openSettingsTab(): Promise<void> {
 			app as unknown as { setting: { open(): void; openTabById(id: string): void } }
 		).setting;
 		setting.open();
-		setting.openTabById("tether-fetch");
+		setting.openTabById("halyard-fetch");
 	});
 	await browser.waitUntil(
 		async () => (await settingNames()).includes("Restrict scheduled refreshes to Wi-Fi"),
-		{ timeout: 10_000, timeoutMsg: "Tether Fetch's settings tab did not render its rows" }
+		{ timeout: 10_000, timeoutMsg: "Halyard Fetch's settings tab did not render its rows" }
 	);
 }
 
@@ -40,7 +40,7 @@ function settingNames(): Promise<string[]> {
 	});
 }
 
-describe("Tether Fetch's settings tab", function () {
+describe("Halyard Fetch's settings tab", function () {
 	afterEach(async function () {
 		await browser.executeObsidian(({ app }) => {
 			(app as unknown as { setting: { close(): void } }).setting.close();
@@ -88,7 +88,7 @@ describe("Tether Fetch's settings tab", function () {
 				app as unknown as {
 					plugins: { plugins: Record<string, { settings: Record<string, unknown> }> };
 				}
-			).plugins.plugins["tether-fetch"];
+			).plugins.plugins["halyard-fetch"];
 			const tab = (
 				app as unknown as {
 					setting: {

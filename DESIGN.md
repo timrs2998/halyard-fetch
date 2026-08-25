@@ -1,4 +1,4 @@
-# Tether Fetch — Design
+# Halyard Fetch — Design
 
 An Obsidian plugin that pulls a generated artifact from a remote registry (GitLab
 Package Registry or GitHub Releases today; CI artifacts and plain authenticated URLs
@@ -7,7 +7,7 @@ vault folder. Read-only: no git, no push, no write path back to the source. The
 plugin cannot modify anything outside the vault it runs in.
 
 No relation to git beyond both being "get external content into a vault" tools. See
-[Tether Sync](https://github.com/timrs2998/tether-sync) for the git-based sibling;
+[Halyard Sync](https://github.com/timrs2998/halyard-sync) for the git-based sibling;
 this plugin exists *because* that one excludes CI and package-artifact ingestion as
 out of scope.
 
@@ -15,7 +15,7 @@ out of scope.
 
 1. **No git.** No clone, no commit, no `.git` anywhere. Every source reduces to
    "GET a zip with an auth header, explode it, mirror it into a folder" — a far
-   smaller surface than Tether Sync, with no engine lifecycle, no merge, and no
+   smaller surface than Halyard Sync, with no engine lifecycle, no merge, and no
    conflict states.
 2. **Read-only, structurally.** Not a default but a property: no code path writes
    back to any source. Existing Obsidian git plugins can't offer this — obsidian-git's
@@ -40,7 +40,7 @@ out of scope.
    rather than assuming one — see "Explode & materialize".
 5. **Tokens belong in the OS keychain.** Obsidian >=1.11's `app.secretStorage`
    (keychain-backed on desktop) is the primary store, with a documented plaintext
-   `data.json` fallback where it is unavailable. Same pattern Tether Sync uses.
+   `data.json` fallback where it is unavailable. Same pattern Halyard Sync uses.
 6. **Cross-platform, with no native dependency.** The `fflate`-based design (see
    "Tooling") keeps the plugin pure JS, so the same code runs on Windows, macOS,
    Linux, iOS and Android — which is what makes `isDesktopOnly: false` honest rather
@@ -81,19 +81,19 @@ obtained.
 ## Auth
 
 Per-source token, stored via `app.secretStorage` keyed by a source id (not by host —
-unlike Tether Sync, two sources can share a host but need different, least-privilege
+unlike Halyard Sync, two sources can share a host but need different, least-privilege
 tokens, which a per-host key could not express
 demonstrates is a real requirement, not a hypothetical one). Settings UI: one PAT
 field per configured source, with per-source-type guidance (GitLab: `read_api` scope;
 GitHub: fine-grained PAT with `Contents: Read` for Releases, `Actions: Read` for
 Actions artifacts). No OAuth device flow anywhere — none of these APIs have one worth
-building against for a read-only integration; PAT-only, matching how Tether Sync
+building against for a read-only integration; PAT-only, matching how Halyard Sync
 already treats every provider without a device grant.
 
 **SecretStorage availability.** `app.secretStorage` needs Obsidian >=1.11 (see
 Constraints #5); on an older install, or any environment where the OS keychain isn't
 reachable (rare, but the API can fail), storing a token falls back to `data.json`
-directly with a persistent warning banner in settings, the same tradeoff Tether Sync
+directly with a persistent warning banner in settings, the same tradeoff Halyard Sync
 already accepts rather than silently downgrading security with no signal.
 
 **Cross-device portability.** Tokens don't travel with the vault: `app.secretStorage`
@@ -119,17 +119,17 @@ discover it only when a second-device refresh fails with an auth error.
   folder genuinely read-only in the editor, so this is enforced at sync time (always
   overwrite what's under the destination folder) with a warning surfaced once before
   the first clobber, not a hard block on typing there between refreshes.
-- **Tether Sync interop, implemented (see `sync-interop.ts`).** A source's
+- **Halyard Sync interop, implemented (see `sync-interop.ts`).** A source's
   `destinationFolder` (and this plugin's own `data.json`, which can hold plaintext
-  fallback tokens — see "Auth") are registered with Tether Sync's `ignoreGlobs` via
-  a structural probe of `app.plugins.plugins["tether-sync"]` for a
-  `registerExternalIgnorePattern(pattern)` method, not a hard dependency — Tether
+  fallback tokens — see "Auth") are registered with Halyard Sync's `ignoreGlobs` via
+  a structural probe of `app.plugins.plugins["halyard-sync"]` for a
+  `registerExternalIgnorePattern(pattern)` method, not a hard dependency — Halyard
   Sync being absent, older, or erroring degrades to a silent no-op. Registration
   happens at plugin load (own `data.json`) and inside `upsertSource` (destination
   folder), *awaited* before the wizard's post-confirm first refresh runs, so the
-  folder is excluded from Tether Sync's tracked tree before it's ever populated —
+  folder is excluded from Halyard Sync's tracked tree before it's ever populated —
   it's never committed in the first place, not committed-then-later-ignored. This
-  is what actually resolves the race between Tether Sync's periodic
+  is what actually resolves the race between Halyard Sync's periodic
   commit/checkout cycle and this plugin's own materialize step (see "Constraints"
   and the multi-device sync review this was flagged in): a path that has never
   been staged can't appear in any commit's tree, so no checkout/merge on any
@@ -195,7 +195,7 @@ that worked fine when it was first configured.
 
 ## Scheduling
 
-Same shape as Tether Sync's scheduler (interval + on-foreground + manual "Refresh
+Same shape as Halyard Sync's scheduler (interval + on-foreground + manual "Refresh
 now" command + catch-up-on-launch), because the constraint producing that design
 (no background execution) is identical here. Per-source interval, not global: sources
 update at genuinely different cadences, and a single global interval would force the
@@ -209,7 +209,7 @@ a full re-download.
 "Refresh now" for that specific source, and "Refresh all sources now" all funnel
 through the same per-source lock, so a manual refresh triggered mid-scheduled-fetch
 waits for the in-flight attempt to finish rather than racing a second
-fetch/materialize against the same destination folder (the exact class of bug Tether
+fetch/materialize against the same destination folder (the exact class of bug Halyard
 Sync's own `AsyncLock` exists to prevent, just scoped per-source here instead of
 per-vault). Sources never lock each other: "Refresh all" fans out independently,
 since two sources share nothing (different hosts, tokens, destinations) and there's
@@ -329,10 +329,10 @@ A failure must be visible without hunting through a log file. Four surfaces:
   refresh is in flight, and a small badge when any source is currently in a failing
   state, so the icon doubles as an always-visible status indicator even without
   opening anything.
-- **Command palette.** `Tether Fetch: Refresh all sources now`,
-  `Tether Fetch: Refresh <source displayName> now` (one command per configured
+- **Command palette.** `Halyard Fetch: Refresh all sources now`,
+  `Halyard Fetch: Refresh <source displayName> now` (one command per configured
   source, registered/deregistered as sources are added or removed),
-  `Tether Fetch: Add source` (opens the setup wizard), `Tether Fetch: Open log`.
+  `Halyard Fetch: Add source` (opens the setup wizard), `Halyard Fetch: Open log`.
 - **Status bar item.** Persistent bottom-bar entry on desktop: idle state shows a
   small icon only; any source failing shows `N failing` as text. Click opens the
   in-app log viewer directly (not settings) — from "something's wrong" the fastest
@@ -364,15 +364,15 @@ blank or absent widget, so first install doesn't read as "is this even working."
 ## Tooling
 
 - TypeScript + esbuild, following the same `obsidian-sample-plugin` conventions
-  Tether Sync already uses: single CJS `main.js`, `obsidian`/`electron` external,
+  Halyard Sync already uses: single CJS `main.js`, `obsidian`/`electron` external,
   `npm run dev` watch, `version-bump.mjs` + `versions.json`.
 - Zip explode: a pure-JS library with no native/WASM dependency (e.g. `fflate`).
-  Unlike Tether Sync's libgit2-over-WASM, there's no reason to compile anything here
+  Unlike Halyard Sync's libgit2-over-WASM, there's no reason to compile anything here
   — a zip reader is well inside what plain JS handles, and staying WASM-free is what
   makes mobile support (see "Constraints" and "Publishing") a straightforward v1
   target rather than a second native-binding project.
 - Dev deps: `obsidian` (^1.13), `esbuild`, `typescript`, `vitest`. Test strategy
-  mirrors Tether Sync's split rather than mocking everything: pure-logic tests
+  mirrors Halyard Sync's split rather than mocking everything: pure-logic tests
   (content-root auto-detection, mirror-diff computation, freshness-check comparison,
   Notice-dedup transition logic, destination-folder-overlap validation, `id`
   generation) *and* tests that run the real zip library against real zip fixtures
@@ -381,12 +381,12 @@ blank or absent widget, so first install doesn't read as "is this even working."
   of boundary-condition code that looks right until it meets a real
   malformed-but-valid zip.
 - **Lint (`eslint.config.mjs`, `npm run lint`):** `eslint:recommended` +
-  `typescript-eslint`'s `recommended` config — same setup as Tether Sync's, for
+  `typescript-eslint`'s `recommended` config — same setup as Halyard Sync's, for
   the same reasons (see that project's DESIGN.md "Tooling" for the rule-choice
   rationale: `@typescript-eslint/no-unused-vars` and `no-undef` off, superseded
   by tsconfig's `noUnusedLocals`/`noUnusedParameters` and the compiler's own
   ambient-global awareness respectively).
-- `manifest.json`: `id: tether-fetch`, `isDesktopOnly: false` (mobile is a v1
+- `manifest.json`: `id: halyard-fetch`, `isDesktopOnly: false` (mobile is a v1
   target — see "Constraints" #3 and #6), `minAppVersion: 1.13.0`. The
   `app.secretStorage` floor from Constraints #5 is only 1.11.0; what raises it
   is the settings tab, which is declarative (`getSettingDefinitions`,
@@ -416,8 +416,8 @@ is PAT-only (see "Auth"), so there is no OAuth app to register first.
 
 ## Out of scope
 
-Git (any form — no relation to Tether Sync's engine). Writing back to any source.
+Git (any form — no relation to Halyard Sync's engine). Writing back to any source.
 Triggering/managing CI pipelines (this only ever reads a result that already exists).
 Arbitrary script execution as part of a source (a source is a fetch+explode+mirror
-config, not a hook). SSH (matches Tether Sync's reasoning — no subprocess on mobile,
+config, not a hook). SSH (matches Halyard Sync's reasoning — no subprocess on mobile,
 HTTPS is the only portable transport anyway for these APIs).

@@ -54,7 +54,7 @@ export interface FallbackSecretPersistence {
 	save(secrets: Record<string, string>): Promise<void>;
 }
 
-const KEY_PREFIX = "tether-fetch-";
+const KEY_PREFIX = "halyard-fetch-";
 
 /** `app.secretStorage.setSecret` requires a lowercase-alphanumeric-plus-dashes ID. */
 function sanitizeSecretId(raw: string): string {

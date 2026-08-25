@@ -10,7 +10,7 @@ import { Modal, Notice, Setting, type App } from "obsidian";
 import { githubCheckFreshness, githubFetchZip } from "../fetchers/github-release";
 import { gitlabCheckFreshness, gitlabFetchZip } from "../fetchers/gitlab-package";
 import { generateSourceId } from "../id";
-import type TetherFetchPlugin from "../main";
+import type HalyardFetchPlugin from "../main";
 import type { GithubReleaseSource, GitlabPackageSource, Source, SourceConfig } from "../types";
 import { findOverlappingDestination, normalizeVaultPath } from "../validation";
 import { detectContentRoot, exceedsSizeGuard, explodeZip } from "../zip/explode";
@@ -74,7 +74,7 @@ export class SourceWizardModal extends Modal {
 
 	constructor(
 		app: App,
-		private readonly plugin: TetherFetchPlugin,
+		private readonly plugin: HalyardFetchPlugin,
 		private readonly existing: Source | undefined,
 		private readonly onDone?: () => void
 	) {
@@ -108,7 +108,7 @@ export class SourceWizardModal extends Modal {
 	}
 
 	onOpen(): void {
-		this.modalEl.addClass("tether-fetch-wizard-modal");
+		this.modalEl.addClass("halyard-fetch-wizard-modal");
 		this.render();
 	}
 
@@ -183,7 +183,7 @@ export class SourceWizardModal extends Modal {
 		containerEl: HTMLElement,
 		opts: { canNext: boolean; nextLabel?: string; onNext: () => void }
 	): void {
-		const footer = containerEl.createDiv({ cls: "tether-fetch-wizard-footer" });
+		const footer = containerEl.createDiv({ cls: "halyard-fetch-wizard-footer" });
 		const index = this.stepIndex();
 		if (index > 0) {
 			footer.createEl("button", { text: "Back" }).onclick = () => this.goTo(STEP_ORDER[index - 1]);
@@ -379,7 +379,7 @@ export class SourceWizardModal extends Modal {
 	// Step 4 -------------------------------------------------------------
 
 	private renderTest(containerEl: HTMLElement): void {
-		const status = containerEl.createDiv({ cls: "tether-fetch-wizard-status" });
+		const status = containerEl.createDiv({ cls: "halyard-fetch-wizard-status" });
 		if (this.testState === "untested") status.setText("Not tested yet.");
 		else if (this.testState === "testing") status.setText("Testing…");
 		else if (this.testState === "ok") status.setText("✓ Connection OK.");
